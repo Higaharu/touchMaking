@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ジェスチャーで物質を操るMRアプリ</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- MediaPipe Hands -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="stage-selector">
+            <button class="stage-btn active" data-stage="sand">砂</button>
+            <button class="stage-btn" data-stage="water">水</button>
+            <button class="stage-btn" data-stage="clay">粘土</button>
+            <button class="stage-btn" data-stage="slime">スライム</button>
+            <button class="stage-btn" data-stage="light">光の粒子</button>
+        </div>
+        
+        <div class="canvas-container">
+            <video id="webcam" autoplay playsinline muted></video>
+            <canvas id="output-canvas"></canvas>
+            <canvas id="hand-overlay"></canvas>
+            <div id="camera-status" class="camera-status">カメラ初期化中...</div>
+        </div>
+        
+        <div class="instructions">
+            <h3>ジェスチャーガイド</h3>
+            <p>👋 手を振る: 物質をかき混ぜる</p>
+            <p>✊ 握る: 物質をつかむ・形を作る</p>
+            <p>👆 指す: 物質を押す</p>
+            <p>🖐 手のひらを開く: 物質を広げる</p>
+            <p class="mr-tip">💡 手をカメラに近づけたり遠ざけたりすると、奥行き効果が生まれます</p>
+        </div>
+        
+        <div class="status-message">
+            <p>カメラとハンドトラッキングの初期化中...</p>
+            <p>手をカメラに向けて動かしてみてください。</p>
+            <p class="mr-hint">画面に映った自分の手と仮想物質が同じ空間にあるように操作してみましょう！</p>
+            <button id="retry-camera" class="retry-button">カメラを再初期化</button>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/handTracking.js"></script>
+    <script src="js/particleSystem.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        // カメラの初期化を確実に行うための追加スクリプト
+        document.addEventListener('DOMContentLoaded', function() {
+            const retryButton = document.getElementById('retry-camera');
+            const cameraStatus = document.getElementById('camera-status');
+            const webcam = document.getElementById('webcam');
+            const handOverlay = document.getElementById('hand-overlay');
+            
+            // オーバーレイキャンバスのサイズをウェブカメラに合わせる
+            function resizeOverlay() {
+                if (handOverlay && webcam) {
+                    handOverlay.width = webcam.offsetWidth;
+                    handOverlay.height = webcam.offsetHeight;
+                }
+            }
+            
+            // 初期サイズ設定
+            setTimeout(resizeOverlay, 500);
+            
+            // リサイズ時にも調整
+            window.addEventListener('resize', resizeOverlay);
+            
+            // 再試行ボタンのイベントハンドラ
+            if (retryButton) {
+                retryButton.addEventListener('click', function() {
+                    cameraStatus.textContent = 'カメラを再初期化しています...';
+                    cameraStatus.style.display = 'block';
+                    
+                    // 既存のハンドトラッカーを初期化
+                    if (window.handTracker) {
+                        // 新しいハンドトラッカーを作成
+                        window.handTracker = new HandTracker();
+                    }
+                    
+                    setTimeout(() => {
+                        cameraStatus.textContent = 'カメラ初期化完了！手を動かしてみてください';
+                        setTimeout(() => {
+                            cameraStatus.style.display = 'none';
+                        }, 3000);
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

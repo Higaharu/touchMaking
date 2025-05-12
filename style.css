@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif;
+    background: #f0f0f0;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stage-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stage-btn {
+    background: #e0e0e0;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.stage-btn:hover {
+    background: #d0d0d0;
+}
+
+.stage-btn.active {
+    background: #3498db;
+    color: white;
+}
+
+.canvas-container {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    background-color: #000;
+}
+
+#webcam {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* Mirror the webcam */
+    z-index: 1;
+    opacity: 0.9; /* Slightly reduce opacity to blend with particles */
+}
+
+#output-canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+#hand-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    transform: scaleX(-1); /* Mirror to match webcam */
+}
+
+.camera-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 10;
+    font-weight: bold;
+    text-align: center;
+    animation: pulse 1.5s infinite;
+}
+
+.instructions {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.instructions h3 {
+    margin-bottom: 10px;
+    color: #2980b9;
+    text-align: center;
+}
+
+.instructions p {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mr-tip {
+    background-color: #e3f2fd;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border-left: 3px solid #2196f3;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.status-message {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #e8f7ff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    color: #2980b9;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.status-message p {
+    margin-bottom: 8px;
+}
+
+.mr-hint {
+    font-weight: bold;
+    color: #1565c0;
+    margin-top: 10px;
+    animation: pulse 2s infinite;
+}
+
+.retry-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.retry-button:hover {
+    background-color: #2980b9;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.error-message {
+    text-align: center;
+    background: rgba(255, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    color: #d32f2f;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+#debug-info {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 100;
+}
+
+/* Material-specific styles */
+.app-container[data-material="sand"] .canvas-container {
+    background-color: #f5e9c6;
+}
+
+.app-container[data-material="water"] .canvas-container {
+    background-color: #071b2f;
+}
+
+.app-container[data-material="clay"] .canvas-container {
+    background-color: #3e2723;
+}
+
+.app-container[data-material="slime"] .canvas-container {
+    background-color: #1b2e0f;
+}
+
+.app-container[data-material="light"] .canvas-container {
+    background-color: #000000;
+}
+
+@media (max-width: 768px) {
+    .stage-selector {
+        flex-wrap: wrap;
+    }
+
+    .canvas-container {
+        height: 50vh;
+    }
+} 
